@@ -61,16 +61,16 @@ while(count_timeseries < total_num_timeseries):
         )
 
         #get all data
-        all_data = []
-        all_data.extend(sim.get_json_simulation_data(target_features = selected_features))
-        save_to_csv(
-                dataset = all_data,
-                selected_features = selected_features,
-                start_idx = 0,
-                end_idx = 1,
-                dataset_save_path = "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/full_data.csv"
-        )
-        raise SystemExit
+        # all_data = []
+        # all_data.extend(sim.get_json_simulation_data(target_features = selected_features))
+        # save_to_csv(
+        #         dataset = all_data,
+        #         selected_features = selected_features,
+        #         start_idx = 0,
+        #         end_idx = 1,
+        #         dataset_save_path = "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/full_data.csv"
+        # )
+        # raise SystemExit
 
         #get the reversal data
         sim.extract_compressed_reversal_data(window_size = total_num_timesteps * 10 // 2) # *10: compression, //2: left & right
