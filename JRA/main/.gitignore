@@ -1,0 +1,8 @@
+thesis/
+models/
+dataset/
+ensemble/
+
+.backupignore
+backup.log
+results/notes.txt

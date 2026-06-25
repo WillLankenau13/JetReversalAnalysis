@@ -1,0 +1,45 @@
+{
+    "seed_val": 7,
+    "seed_vals": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45],
+    "model_path": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/models/transformer-150-50-10.pt",
+    "ensemble_root_path": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/ensemble",
+    "dataset_path": {
+        "train": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/stream_dataset-train.csv",
+        "validation": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/stream_dataset-val.csv",
+        "test": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/stream_dataset-test.csv",
+        "stats": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/JRA/stream_dataset-stats.csv"
+    },
+    "stats_path": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/Trident/stats.csv",
+    "num_single_sample_timesteps": 100000,
+    "input_window_length": 100,
+    "label_window_length": 50,
+    "window_stride": 35,
+    "input_features": [
+        "psi_e",
+        "b_e",
+        "psi_plus",
+        "b_plus",
+        "u_list",
+        "eta_list"
+    ],
+    "label_features": [
+        "psi_e",
+        "b_e",
+        "psi_plus",
+        "b_plus",
+        "u_list"
+    ],
+    "extra_features": [
+        "dom_eigenvals"
+    ],
+    "relative_attention_num_buckets": 64,
+    "embedding_dim": 128,
+    "num_attention_head": 8,
+    "num_encoder_layers": 5,
+    "num_decoder_layers": 5,
+    "position_wise_nn_dim": 64,
+    "dropout": 0.5,
+    "batch_size": 128,
+    "epochs": 10,
+    "learning_rate": 0.0005
+}

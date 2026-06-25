@@ -1,0 +1,66 @@
+{
+    "deterministic": {
+        "seed_value": 1,
+        "num_runs": 500,
+        "save_seed_batch_size": 50,
+        "dataset_save_root_path": ".",
+        "dataset_name": "deterministic_dataset.csv",
+        "random_simulation": {
+            "epsilon": 0.12394270273516043,
+            "N_0_squared": 318.8640217310387,
+            "r_m": 0.1,
+            "dt": 0.001,
+            "total_time": 500,
+            "initial_U": 0.01
+        },
+        "deterministic_simulation": {
+            "interval_steps": 5000,
+            "starting_step": 1000,
+            "selected_features": [
+                "psi_e",
+                "b_e",
+                "psi_plus",
+                "b_plus",
+                "u_list"
+            ]
+        }
+    },
+    "random": {
+        "old_timeseries_save_batch_size": 200,
+        "old_total_num_timeseries": 10000,
+        "old_total_num_timesteps": 1000,
+        "old_per_seed_num_timeseries": 100,
+        "timeseries_save_batch_size": 50,
+        "total_num_timeseries": 50,
+        "total_num_timesteps": 1000,
+        "per_seed_num_timeseries": 50,
+        "dataset": {
+            "name": "random_dataset.csv",
+            "root_path": "C:/Users/Will6/OneDrive/Documents/Memorial University/Code"
+        },
+        "old_epsilon": 0.12394270273516043,
+        "epsilon": 0.01,
+        "N_0_squared": 318.8640217310387,
+        "r_m": 0.1,
+        "dt": 0.001,
+        "total_time": 500,
+        "initial_U": 0.01,
+        "selected_features": [
+            "psi_e",
+            "b_e",
+            "psi_plus",
+            "b_plus",
+            "u_list",
+            "r_list",
+            "k_e_psi_e_list",
+            "k_e_b_e_list",
+            "k_e_psi_plus_list",
+            "k_e_b_plus_list",
+            "heat_flux_psi_e_b_e_list",
+            "heat_flux_psi_e_b_plus_list",
+            "b_e_psi_plus_list",
+            "b_e_b_plus_list",
+            "psi_plus_b_plus_list"
+        ]
+    }
+}
