@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 # Use full path instead of ~
-with open("/users/labnet5/gr5/abahari/Documents/Thesis/src/params.json", mode = "r", encoding = "utf-8") as f:
+with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     stats_path = data["stats_path"]
     input_window_length = data["input_window_length"]

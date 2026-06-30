@@ -61,17 +61,14 @@ def simulate_numba(
         phi_e_dot[0] = W_e[0, 0] * phi_e[0] + W_e[0, 1] * phi_e[1] + U * (
             L_e_plus[0, 0] * phi_plus[0] + L_e_plus[0, 1] * phi_plus[1]) + (np.sqrt(epsilon) * xi[0]) / np.sqrt(dt)
         phi_e_dot[1] = W_e[1, 0] * phi_e[0] + W_e[1, 1] * phi_e[1] + U * (
-            L_e_plus[1, 0] * phi_plus[0] + L_e_plus[1, 1] * phi_plus[1]) + (np.sqrt(epsilon) * xi[1]) / np.sqrt(dt)
+            L_e_plus[1, 0] * phi_plus[0] + L_e_plus[1, 1] * phi_plus[1]) + (np.sqrt(epsilon) * xi[1]) / np.sqrt(dt) #this stochastic forcing is actually 0
 
-        #no stochastic forcing for phi_plus_dot? why?
-        #is it because we are only adding randomness in one direction?
-        #likely because stochastic forcing vector is only nonzero in one term
         phi_plus_dot[0] = W_plus[0, 0] * phi_plus[0] + W_plus[0, 1] * phi_plus[1] + U * (
             L_plus_e[0, 0] * phi_e[0] + L_plus_e[0, 1] * phi_e[1])
         phi_plus_dot[1] = W_plus[1, 0] * phi_plus[0] + W_plus[1, 1] * phi_plus[1] + U * (
             L_plus_e[1, 0] * phi_e[0] + L_plus_e[1, 1] * phi_e[1])
 
-        #putting parts of equation 2.10 into the jacobian? why?
+        #putting parts of equation 2.10 into the jacobian
         #these are the partial derivatives of equation 2.10 wrt phi_e[0] (psi_e), phi_e[1] (b_e), phi_plus[0] (psi_plus), phi_plus[1] (b_plus), and U
         jacobian[0, 0] = W_e[0, 0]
         jacobian[0, 1] = W_e[0, 1]
@@ -107,7 +104,7 @@ def simulate_numba(
         R = 0.25 * k * (k_plus_square - k_e_square) * phi_e[0] * phi_plus[0]
         U_dot = R - r_m * U
 
-        #putting more garbage into the jacobian
+        #putting more stuff into the jacobian
         jacobian[4, 0] = 0.25 * k * (k_plus_square - k_e_square) * phi_plus[0]
         jacobian[4, 1] = 0
         jacobian[4, 2] = 0.25 * k * (k_plus_square - k_e_square) * phi_e[0]
