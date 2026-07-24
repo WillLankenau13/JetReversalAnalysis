@@ -24,6 +24,7 @@ with open("./Trident/params.json", mode = "r", encoding = "utf-8") as f:
     total_time = params["random"]["total_time"]
     initial_U = params["random"]["initial_U"]
     selected_features = params["random"]["selected_features"]
+    full_data_selected_features = params["random"]["full_data_selected_features"]
 
 
 
@@ -31,9 +32,11 @@ with open("./Trident/params.json", mode = "r", encoding = "utf-8") as f:
 
 count_timeseries = 0
 count_timeseries_per_seed = 0
-seed_val = 0
+#seed_val = 0
 start_idx = 0
 dataset = []
+
+seed_val = 1776
 
 while(count_timeseries < total_num_timeseries):
     print(f"==================== Random Seed: {seed_val} ====================")
@@ -61,16 +64,16 @@ while(count_timeseries < total_num_timeseries):
         )
 
         #get all data
-        # all_data = []
-        # all_data.extend(sim.get_json_simulation_data(target_features = selected_features))
-        # save_to_csv(
-        #         dataset = all_data,
-        #         selected_features = selected_features,
-        #         start_idx = 0,
-        #         end_idx = 1,
-        #         dataset_save_path = "C:/Users/Will6/OneDrive/Documents/Memorial University/Code/full_data.csv"
-        # )
-        # raise SystemExit
+        all_data = []
+        all_data.extend(sim.get_compressed_json_simulation_data(target_features = full_data_selected_features))
+        save_to_csv(
+                dataset = all_data,
+                selected_features = full_data_selected_features,
+                start_idx = 0,
+                end_idx = 1,
+                dataset_save_path = "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/full_data.csv"
+        )
+        #raise SystemExit
 
         #get the reversal data
         sim.extract_compressed_reversal_data(window_size = total_num_timesteps * 10 // 2) # *10: compression, //2: left & right

@@ -1,1 +1,0 @@
-python JRA/preprocessed/utils/scripts/generate-windowed-dataset.py --input-dataset ./Trident/random_reversal_data_with_covariance.csv --output-zarr ./JRA/output.zarr --num-windows 54000 --num-timesteps 1000 --mode reversal --normalize n

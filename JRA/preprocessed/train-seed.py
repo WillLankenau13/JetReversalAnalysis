@@ -3,7 +3,7 @@
 
 import json
 
-with open("./params.json", mode = "r", encoding = "utf-8") as f:
+with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     ensemble_root_path = data["ensemble_root_path"]
     dataset_path_train = data["dataset_path"]["train"]

@@ -9,6 +9,7 @@ np.random.seed(0)
 
 
 # Use full path instead of ~
+#Read params
 with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     stats_path = data["stats_path"]
@@ -19,6 +20,7 @@ with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f
     input_features = data["input_features"]
     label_features = data["label_features"]
 
+#Parse arguments
 parser = argparse.ArgumentParser(description = "Dataset Information")
 parser.add_argument(
     "--input-dataset",
@@ -52,11 +54,11 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+#Define params
 num_single_sample_timesteps = int(args.num_timesteps)
 num_windows = int(args.num_windows)
 if(num_windows < 0):
     num_windows = float("+inf")
-
 
 
 def pl2numpy(df, cols, target_stat):
@@ -64,32 +66,42 @@ def pl2numpy(df, cols, target_stat):
         [col + "_" + target_stat for col in cols]
     ).to_numpy()
 
-compressor = Blosc(
+##
+from zarr.codecs import BloscCodec
+
+#define compressor
+compressor = BloscCodec(
     cname = "zstd",
     clevel = 5,
-    shuffle = Blosc.BITSHUFFLE
+    shuffle = "bitshuffle"
 )
 store = zarr.open(args.output_zarr, mode = "w")
 
+#set params for getting inputs
 inputs = store.create(
     name = "input",
     shape = (0, input_window_length, len(input_features)),
     chunks = (1024, input_window_length, len(input_features)),
     dtype = "float32",
-    compressor = compressor,
+    compressors = compressor,
     fill_value = 0,
     overwrite = True
 )
+
+#set params for getting labels
 labels = store.create(
     name = "label",
     shape = (0, label_window_length, len(label_features)),
     chunks = (1024, label_window_length, len(label_features)),
     dtype = "float32",
-    compressor = compressor,
+    compressors = compressor,
     fill_value = 0,
     overwrite = True
 )
+##
 
+
+#get means and stds
 if(args.normalize == "y"):
     stats = pl.read_csv(stats_path)
 
@@ -101,6 +113,7 @@ if(args.normalize == "y"):
     label_stds = pl2numpy(stats, label_features, "std")
     label_stds[label_stds == 0] = 10 ** -8
 
+#count number of timeseries and the windows per timeseries rate
 windows_per_timeseries = float("+inf")
 if(args.mode == "stream"):
     num_timeseries = 0
@@ -124,6 +137,7 @@ while(True):
     if(new_chunk is None):
         break
     
+    #get data by chunks from dataframe
     for data_chunk in new_chunk:
         if("eta_list" in data_chunk.columns):
             data_chunk = (
@@ -149,6 +163,7 @@ while(True):
                 ])
             )
 
+        #put the data into tensors
         input_df = data_chunk.select(
             input_features
         ).explode("*").to_numpy().reshape(
@@ -162,16 +177,20 @@ while(True):
 
         buffer_idx = 0
 
+        #for each time series
         for time_series_idx in range(data_chunk.shape[0]):
             if(num_selected_windows >= num_windows):
                 break
             
+            #iterate through to get windows
             starting_idx = np.random.randint(2000, 7000)
             num_timeseries_windows = 0
             
+            #for 0 to end, striding by window_stride
             for input_window_start_idx in range(0, num_single_sample_timesteps - valid_length + 1, window_stride):
                 label_window_start_idx = input_window_start_idx + input_window_length
 
+                #get the windows
                 input_window = input_df[time_series_idx, input_window_start_idx: label_window_start_idx, :]
                 label_window = label_df[time_series_idx, label_window_start_idx: label_window_start_idx + label_window_length, :]
                 num_total_windows += 1
@@ -207,5 +226,5 @@ while(True):
 
 print(f"{args.output_zarr} created!")
 print(f"Selected Windows: {num_selected_windows}, Total Windows: {num_total_windows}")
-print(f"Selected/Total Ratio: {num_selected_windows / num_total_windows}")
+#print(f"Selected/Total Ratio: {num_selected_windows / num_total_windows}")
 

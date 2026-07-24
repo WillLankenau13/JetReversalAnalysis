@@ -4,12 +4,20 @@ import json
 import argparse
 
 # Use full path instead of ~
-with open("/users/labnet5/gr5/abahari/Documents/Thesis/src/params.json", mode = "r", encoding = "utf-8") as f:
+# with open("C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
+#     data = json.load(f)
+#     seed_val = data["seed_val"]
+#     train_ratio = 0.35
+#     val_ratio = 0.1
+#     test_ratio = 0.05
+#     stats_ratio = 0.5
+
+with open("C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     seed_val = data["seed_val"]
-    train_ratio = 0.35
-    val_ratio = 0.1
-    test_ratio = 0.05
+    train_ratio = 0.0
+    val_ratio = 0.0
+    test_ratio = 0.5
     stats_ratio = 0.5
 
 np.random.seed(seed_val)

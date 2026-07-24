@@ -7,11 +7,13 @@ import argparse
 
 
 # Use full path instead of ~
-with open("/users/labnet5/gr5/abahari/Documents/Thesis/src/params.json", mode = "r", encoding = "utf-8") as f:
+#params
+with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     label_features = data["label_features"]
     extra_features = data["extra_features"]
 
+#parse arguments
 parser = argparse.ArgumentParser(description = "Dataset Information")
 parser.add_argument("--input-dataset", required = True, help = "Input CSV Test Dataset")
 parser.add_argument("--output-zarr", required = True, help = "Output Zarr Dataset")
@@ -20,32 +22,42 @@ args = parser.parse_args()
 
 num_single_sample_timesteps = int(args.num_timesteps)
 
+##
+import zarr
+from zarr.codecs import BloscCodec, BloscShuffle
 
-compressor = Blosc(
-    cname = "zstd",
-    clevel = 5,
-    shuffle = Blosc.BITSHUFFLE
+#compressor
+compressor = BloscCodec(
+    cname="zstd",
+    clevel=5,
+    shuffle=BloscShuffle.bitshuffle,
 )
-store = zarr.open(args.output_zarr, mode = "w")
 
-labels_store = store.create(
-    name = "label",
-    shape = (0, num_single_sample_timesteps, len(label_features)),
-    chunks = (1024, num_single_sample_timesteps, len(label_features)),
-    dtype = "float32",
-    compressor = compressor,
-    fill_value = 0,
-    overwrite = True
+store = zarr.open(args.output_zarr, mode="w")
+
+#set params for getting labels
+labels_store = store.create_array(
+    name="label",
+    shape=(0, num_single_sample_timesteps, len(label_features)),
+    chunks=(1024, num_single_sample_timesteps, len(label_features)),
+    dtype="float32",
+    compressors=compressor,
+    fill_value=0,
+    overwrite=True,
 )
-extras_store = store.create(
-    name = "extra",
-    shape = (0, num_single_sample_timesteps, len(extra_features)),
-    chunks = (1024, num_single_sample_timesteps, len(extra_features)),
-    dtype = "float32",
-    compressor = compressor,
-    fill_value = 0,
-    overwrite = True
+
+#set params for getting extras
+extras_store = store.create_array(
+    name="extra",
+    shape=(0, num_single_sample_timesteps, len(extra_features)),
+    chunks=(1024, num_single_sample_timesteps, len(extra_features)),
+    dtype="float32",
+    compressors=compressor,
+    fill_value=0,
+    overwrite=True,
 )
+
+##
 
 buffer_size = 128
 buffer_labels = np.zeros((buffer_size, num_single_sample_timesteps, len(label_features)))
@@ -57,6 +69,7 @@ while(True):
     if(new_chunk is None):
         break
     
+    #split data into chunks
     for data_chunk in new_chunk:
         data_chunk = (
             data_chunk
@@ -73,6 +86,7 @@ while(True):
             ])
         )
 
+        #put chunked data in dfs
         label_df = data_chunk.select(
             label_features
         ).explode("*").to_numpy().reshape(

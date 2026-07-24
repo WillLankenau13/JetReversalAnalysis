@@ -6,7 +6,7 @@ import dask.array as da
 import numpy as np
 
 # Use full path instead of ~
-with open("/users/labnet5/gr5/abahari/Documents/Thesis/src/params.json", mode = "r", encoding = "utf-8") as f:
+with open("C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     input_features = data["input_features"]
 

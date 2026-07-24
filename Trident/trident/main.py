@@ -308,6 +308,35 @@ class Simulation:
         return [{feature: data_dict[feature] for feature in target_features if feature in data_dict}]
 
 
+    #put it in json format
+    #compressed version
+    def get_compressed_json_simulation_data(self, target_features):
+        # print("    - Getting data in json format...")
+        data_dict = {
+            "eps": f"{self.epsilon:.5f}",
+            "n_0_squared": f"{self.N_0_squared:.5f}",
+            "psi_e": json.dumps(self.phi_e_history[:, 0][9::10].tolist()),
+            "b_e": json.dumps(self.phi_e_history[:, 1][9::10].tolist()),
+            "psi_plus": json.dumps(self.phi_plus_history[:, 0][9::10].tolist()),
+            "b_plus": json.dumps(self.phi_plus_history[:, 1][9::10].tolist()),
+            "u_list": json.dumps(self.U_history[9::10].tolist()),
+            "r_list": json.dumps(self.R_vals[9::10].tolist()),
+            "k_e_psi_e_list": json.dumps(self.k_e_psi_e_vals[9::10].tolist()),
+            "k_e_b_e_list": json.dumps(self.k_e_b_e_vals[9::10].tolist()),
+            "k_e_psi_plus_list": json.dumps(self.k_e_psi_plus_vals[9::10].tolist()),
+            "k_e_b_plus_list": json.dumps(self.k_e_b_plus_vals[9::10].tolist()),
+            "heat_flux_psi_e_b_e_list": json.dumps(self.heat_flux_psi_e_b_e_vals[9::10].tolist()),
+            "heat_flux_psi_e_b_plus_list": json.dumps(self.heat_flux_psi_e_b_plus_vals[9::10].tolist()),
+            "b_e_psi_plus_list": json.dumps(self.b_e_psi_plus_vals[9::10].tolist()),
+            "b_e_b_plus_list": json.dumps(self.b_e_b_plus_vals[9::10].tolist()),
+            "psi_plus_b_plus_list": json.dumps(self.psi_plus_b_plus_vals[9::10].tolist()),
+            "eta_list": json.dumps(self.eta_batch[9::10].tolist()),
+            "dom_eigenvals": json.dumps(self.get_dominant_eigenvalues()[9::10].tolist())
+        }
+
+        return [{feature: data_dict[feature] for feature in target_features if feature in data_dict}]
+
+
     #reversal data to json format
     def get_json_reversal_data(self, target_features):
         json_data = []

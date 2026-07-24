@@ -37,7 +37,7 @@ def train(model, optimizer, criterion, r2, per_timestep_r2, per_feature_r2, per_
         train_loss_u = 0.0
         train_loss_plus = 0.0
         train_loss_e = 0.0
-    
+
     progress_bar = tqdm(
         data_loader,
         desc = f"Epoch {epoch + 1}/{total_epochs}"

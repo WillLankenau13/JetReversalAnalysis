@@ -2,11 +2,11 @@ import polars as pl
 import json
 
 # Use full path instead of ~
-with open("/users/labnet5/gr5/abahari/Documents/Thesis/src/params.json", mode = "r", encoding = "utf-8") as f:
+with open("C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     stats_dataset_path = data["finetune_reversals_dataset_path"]["stats"]
     input_features = data["input_features"]
-    final_stats_path = "/mnt/abahari/stats5050-reversals.csv"
+    final_stats_path = "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/stats5050-reversals.csv"
 
 
 def get_mean_std(dataset_path, cols):

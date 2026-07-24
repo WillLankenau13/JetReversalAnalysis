@@ -5,7 +5,7 @@
 
 import zarr
 import numpy as np
-from numcodecs import Blosc
+#from numcodecs import Blosc
 import argparse
 
 np.random.seed(7)
@@ -33,27 +33,34 @@ perm = np.random.permutation(num_samples)
 inputs_shuffled = inputs[perm]
 labels_shuffled = labels[perm]
 
-compressor = Blosc(
-    cname = "zstd",
-    clevel = 5,
-    shuffle = Blosc.BITSHUFFLE
+##
+import zarr
+from zarr.codecs import BloscCodec, BloscShuffle
+
+inputs_shuffled = inputs_shuffled.astype("float32")
+labels_shuffled = labels_shuffled.astype("float32")
+
+compressor = BloscCodec(
+    cname="zstd",
+    clevel=5,
+    shuffle=BloscShuffle.bitshuffle,
 )
 
-store = zarr.open(args.output_zarr, mode = "w")
+store = zarr.open(args.output_zarr, mode="w")
 
-store.create_dataset(
-    name = "input",
-    data = inputs_shuffled,
-    chunks = (1024, inputs_shuffled.shape[1], inputs_shuffled.shape[2]),
-    dtype = "float32",
-    compressor = compressor,
+store.create_array(
+    name="input",
+    data=inputs_shuffled,
+    chunks=(1024, inputs_shuffled.shape[1], inputs_shuffled.shape[2]),
+    compressors=compressor,
 )
-store.create_dataset(
-    name = "label",
-    data = labels_shuffled,
-    chunks = (1024, labels_shuffled.shape[1], labels_shuffled.shape[2]),
-    dtype = "float32",
-    compressor = compressor,
+
+store.create_array(
+    name="label",
+    data=labels_shuffled,
+    chunks=(1024, labels_shuffled.shape[1], labels_shuffled.shape[2]),
+    compressors=compressor,
 )
+##
 
 print(f"Merged and randomly shuffled zarr file created at {args.output_zarr}")

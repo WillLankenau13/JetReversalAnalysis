@@ -1,5 +1,6 @@
 
-
+#checking to see if model is overfit
+#Overfit if difference between train and val loss is greater than 0.003 3 times
 class Overfit:
     def __init__(self, start_epoch = 10, threshold = 0.003, patience = 3):
         self.start_epoch = start_epoch

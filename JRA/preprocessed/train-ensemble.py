@@ -1,6 +1,6 @@
 import json
 
-with open("./params.json", mode = "r", encoding = "utf-8") as f:
+with open("./JRA/preprocessed/params.json", mode = "r", encoding = "utf-8") as f:
     data = json.load(f)
     seed_vals = data["seed_vals"]
     ensemble_root_path = data["ensemble_root_path"]
@@ -71,12 +71,15 @@ def run_model_process(
     # overfit_monitor = Overfit()
     # overfit_count = 0
 
-    criterion = torch.nn.L1Loss()
+    criterion = torch.nn.L1Loss() #Absolute value loss instead of squared
 
+    #R squared
     train_r2 = R2Score(multioutput = "uniform_average").to(device)
     val_stream_r2 = R2Score(multioutput = "uniform_average").to(device)
     val_reversal_r2 = R2Score(multioutput = "uniform_average").to(device)
 
+    #Pearson correlation coefficient
+    #Measure of how two variables are linearly correlated
     train_per_feature_pearson = PearsonCorrCoef(num_outputs = len(label_features)).to(device)
     val_stream_per_feature_pearson = PearsonCorrCoef(num_outputs = len(label_features)).to(device)
     val_reversal_per_feature_pearson = PearsonCorrCoef(num_outputs = len(label_features)).to(device)
@@ -90,6 +93,7 @@ def run_model_process(
     val_reversal_per_feature_r2 = R2Score(multioutput = "raw_values").to(device)
 
     for epoch in range(epochs):
+        #Train function from Run.py
         train_loss, train_r2_value, train_ft_r2s, train_ts_r2s, train_feature_pearsons = train(
             model = model,
             optimizer = optimizer,
@@ -104,6 +108,8 @@ def run_model_process(
             total_epochs = epochs
         )
 
+        #Validate function from Run.py
+        #For stream dataset
         val_stream_loss, val_stream_r2_value, val_stream_ft_r2s, val_stream_ts_r2s, val_stream_feature_pearsons = validate(
             model = model,
             criterion = criterion,
@@ -118,6 +124,8 @@ def run_model_process(
             target = "Stream"
         )
 
+        #Validate function from Run.py
+        #For reversal dataset
         val_reversal_loss, val_reversal_r2_value, val_reversal_ft_r2s, val_reversal_ts_r2s, val_reversal_feature_pearsons = validate(
             model = model,
             criterion = criterion,
@@ -211,9 +219,9 @@ ________________________________________________________________________________
 
 '''
 
-num_log = len(os.listdir("./ensemble")) - 1
-os.mkdir(f"./ensemble/{num_log}")
-with open(f"./ensemble/logs/{num_log}-info.log", mode = "a") as f:
+num_log = len(os.listdir("./JRA/preprocessed/ensemble")) - 1
+os.mkdir(f"./JRA/preprocessed/ensemble/{num_log}")
+with open(f"./JRA/preprocessed/ensemble/logs/{num_log}-info.log", mode = "a") as f:
     f.write(datetime.now().strftime("%Y-%m-%dT%H:%M:%S") + "\n")
     f.write(setup)
 

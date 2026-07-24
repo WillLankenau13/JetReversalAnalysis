@@ -3,7 +3,7 @@ import zarr, fsspec
 import numpy as np
 
 
-
+#Define windowed dataset class
 class WindowedDataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path):
         super().__init__()
@@ -25,7 +25,7 @@ class WindowedDataset(torch.utils.data.Dataset):
         return x, y
 
 
-
+#Define another dataset class
 class InferenceAnalysisDataset(torch.utils.data.Dataset):
     def __init__(self, windowed_dataset_path, full_dataset_path, index_full_update_len):
         super().__init__()
@@ -44,7 +44,7 @@ class InferenceAnalysisDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return self.num_datapoints
-    
+
     def __getitem__(self, index):
         index_windowed = index
         index_full = index // self.index_full_update_len
