@@ -15,8 +15,8 @@
                 "full": "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/data/dataset-stream-full-test.zarr"
             },
             "reversal": {
-                "windowed": "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/data/dataset-reversal-windowed-test.zarr",
-                "full": "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/data/dataset-reversal-full-test.zarr"
+                "windowed": "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/data/dataset-reversal-windowed-test-1000.zarr",
+                "full": "C:/Users/Will6/OneDrive/Documents/MemorialUniversity/JetReversalAnalysis/JRA/preprocessed/data/dataset-reversal-full-test-1000.zarr"
             }
         }
     },
